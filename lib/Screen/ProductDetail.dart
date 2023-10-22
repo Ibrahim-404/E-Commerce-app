@@ -2,23 +2,25 @@ import 'package:flutter/material.dart';
 import "package:carousel_slider/carousel_slider.dart";
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:start_project/CustomWidget/CustomDotIndecator.dart';
-import 'package:start_project/main.dart';
-
 class ProductDetail extends StatefulWidget {
   final int? ID;
-  const ProductDetail({ this.ID});
+  String? TilteName;
+  List<String>?SliderImages;
+  String? DescraptionName;
+   ProductDetail({ this.ID, this.TilteName, this.DescraptionName, this.SliderImages});
 
   @override
   // ProductDetail(
   //     {required this.TilteName,required this.SliderImages,required this.DescraptionName,this.ID});
   State<ProductDetail> createState() => _ProductDetailState();
 }
+// ID:this.ID!
 class _ProductDetailState extends State<ProductDetail> {
-
-
-  String? TilteName;
-  List<String>?SliderImages;
-  String? DescraptionName;
+  // _ProductDetailState({required this.ID});
+ // final int ID;
+  // String? TilteName;
+  // List<String>?SliderImages;
+  // String? DescraptionName;
 
 
 
@@ -55,7 +57,7 @@ class _ProductDetailState extends State<ProductDetail> {
         ),
         backgroundColor: Colors.white,
         title: Text(
-          "$TilteName",
+          "${widget.TilteName}",
           style: TextStyle(
               color: Color(0xFF223263),
               fontSize: 16,
@@ -77,243 +79,239 @@ class _ProductDetailState extends State<ProductDetail> {
       body: Container(
         width: MediaQuery.of(context).size.width,
         margin: EdgeInsets.symmetric(horizontal: 16),
-        child:FutureBuilder(future:HandlingDataForProduct() ,builder: (context, snapshot) {
-
-          return  SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CarouselSlider(
-                  options: CarouselOptions(
-                    height: 238.0,
-                    onPageChanged: (index, reason) {
-                      setState(() {
-                        currentIndex = index;
-                      });
+        child:SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CarouselSlider(
+                options: CarouselOptions(
+                  height: 238.0,
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      currentIndex = index;
+                    });
+                  },
+                ),
+                items:widget.SliderImages!.map((i) {
+                  return Builder(
+                    builder: (BuildContext context) {
+                      return ProductSlider(image: i);
                     },
-                  ),
-                  items: snapshot.data!.data.ListOFCategoryApi.map((i) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return ProductSlider(image: i.image!);
-                      },
-                    );
-                  }).toList(),
-                ),
-                CustomDotIndecator(
-                  currentIndexInCarouselSlider: currentIndex,
-                  lengthOfImageInApi: SliderImages!.length,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(top: 16),
-                      height: 60,
-                      width: 0.73 * WidthScreen,
-                      child: Text(
-                        "$TilteName",
-                        maxLines: 2,
-                        style: TextStyle(
-                          overflow: TextOverflow.ellipsis,
-                          color: Color(0xFF223263),
-                        ),
+                  );
+                }).toList(),
+              ),
+              CustomDotIndecator(
+                currentIndexInCarouselSlider: currentIndex,
+                lengthOfImageInApi: widget.SliderImages!.length,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 16),
+                    height: 60,
+                    width: 0.73 * WidthScreen,
+                    child: Text(
+                      "${widget.TilteName}",
+                      maxLines: 2,
+                      style: TextStyle(
+                        overflow: TextOverflow.ellipsis,
+                        color: Color(0xFF223263),
                       ),
                     ),
-                    IconButton(
-                        onPressed: () {
-                          setState(() {
-                            Foveritialized == true
-                                ? Foveritialized = false
-                                : Foveritialized = true;
-                          });
-                        },
-                        icon: Icon(
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        setState(() {
                           Foveritialized == true
-                              ? Icons.favorite_outlined
-                              : Icons.favorite_border_outlined,
-                          color:
-                              Foveritialized == true ? Colors.red : Colors.grey,
-                        ))
-                  ],
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                Container(
-                  width: 0.256 * WidthScreen,
-                  height: 16,
-                  child: RatingBar.builder(
-                    initialRating: 3,
-                    minRating: 1,
-                    direction: Axis.horizontal,
-                    allowHalfRating: true,
-                    itemCount: 5,
-                    itemSize: 12,
-                    itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                    itemBuilder: (context, _) => Icon(
-                      Icons.star,
-                      color: Colors.amber,
-                    ),
-                    onRatingUpdate: (rating) {
-                      print(rating);
-                    },
+                              ? Foveritialized = false
+                              : Foveritialized = true;
+                        });
+                      },
+                      icon: Icon(
+                        Foveritialized == true
+                            ? Icons.favorite_outlined
+                            : Icons.favorite_border_outlined,
+                        color:
+                            Foveritialized == true ? Colors.red : Colors.grey,
+                      ))
+                ],
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Container(
+                width: 0.256 * WidthScreen,
+                height: 16,
+                child: RatingBar.builder(
+                  initialRating: 3,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 5,
+                  itemSize: 12,
+                  itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                  itemBuilder: (context, _) => Icon(
+                    Icons.star,
+                    color: Colors.amber,
                   ),
+                  onRatingUpdate: (rating) {
+                    print(rating);
+                  },
                 ),
-                SizedBox(
-                  height: 16,
-                ),
-                Container(
-                  child: Text(
-                    "\$24",
-                    style: TextStyle(
-                      color: Color(0xFF40BFFF),
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                Text(
-                  "select size",
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Container(
+                child: Text(
+                  "\$24",
                   style: TextStyle(
-                      color: Color(0xFF223263),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    Container(
-                      width: 350,
-                      height: 48,
-                      child: ListView.separated(
-                        shrinkWrap: true,
-                        itemCount: LsitOfSize.length,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          // SizeStart+=0.5;
-
-                          return Container(
-                            height: 48,
-                            width: 48,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(width: 1),
-                            ),
-                            child: Center(
-                              child: Text(
-                                "${LsitOfSize[index]}",
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight
-                                        .w500), //how to make this text in center shap
-                              ),
-                            ),
-                          );
-                        },
-                        separatorBuilder: (context, index) {
-                          return SizedBox(
-                            width: 5,
-                            height: 8,
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                Text(
-                  "select color",
-                  style: TextStyle(
-                      color: Color(0xFF223263),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  height: 48,
-                  width: 0.981 * WidthScreen,
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: ColorsOption.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                          child: CircleAvatar(
-                              backgroundColor: ColorsOption[index],
-                              radius: 25,
-                              child: CircleAvatar(
-                                  backgroundColor:
-                                      ClickedOntoColorOptionForChoiceColorYouWant ==
-                                              true
-                                          ? Colors.white
-                                          : ColorsOption[index],
-                                  radius: 8)),
-                          onTap: () {
-                            setState(() {
-                              ClickedOntoColorOptionForChoiceColorYouWant == true
-                                  ? ClickedOntoColorOptionForChoiceColorYouWant =
-                                      false
-                                  : ClickedOntoColorOptionForChoiceColorYouWant =
-                                      true;
-                            });
-                          });
-                    },
-                    separatorBuilder: (context, index) {
-                      return SizedBox(
-                        width: 1,
-                      );
-                    },
-                  ),
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                Text(
-                  "Specification",
-                  style: TextStyle(
-                    color: Color(0xFF223263),
-                    fontSize: 14,
+                    color: Color(0xFF40BFFF),
+                    fontSize: 20,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                SizedBox(
-                  height: 16,
-                ),
-                Container(
-                  height: 241,
-                  width: 0.9146 * WidthScreen,
-                  child: Text(
-                    "",
-                    style: TextStyle(
-                        color: Color(0xFF223263),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400),
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Text(
+                "select size",
+                style: TextStyle(
+                    color: Color(0xFF223263),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Container(
+                    width: 350,
+                    height: 48,
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: LsitOfSize.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        // SizeStart+=0.5;
+
+                        return Container(
+                          height: 48,
+                          width: 48,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(width: 1),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "${LsitOfSize[index]}",
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight
+                                      .w500), //how to make this text in center shap
+                            ),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return SizedBox(
+                          width: 5,
+                          height: 8,
+                        );
+                      },
+                    ),
                   ),
+                ],
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Text(
+                "select color",
+                style: TextStyle(
+                    color: Color(0xFF223263),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                height: 48,
+                width: 0.981 * WidthScreen,
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: ColorsOption.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                        child: CircleAvatar(
+                            backgroundColor: ColorsOption[index],
+                            radius: 25,
+                            child: CircleAvatar(
+                                backgroundColor:
+                                    ClickedOntoColorOptionForChoiceColorYouWant ==
+                                            true
+                                        ? Colors.white
+                                        : ColorsOption[index],
+                                radius: 8)),
+                        onTap: () {
+                          setState(() {
+                            ClickedOntoColorOptionForChoiceColorYouWant == true
+                                ? ClickedOntoColorOptionForChoiceColorYouWant =
+                                    false
+                                : ClickedOntoColorOptionForChoiceColorYouWant =
+                                    true;
+                          });
+                        });
+                  },
+                  separatorBuilder: (context, index) {
+                    return SizedBox(
+                      width: 1,
+                    );
+                  },
                 ),
-                Row(children: [
-                  Text(
-                    "$DescraptionName",
-                    style: TextStyle(
-                        color: Color(0xFF223263),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400),
-                  )              ],
-                )
-              ],
-            ),
-          );
-        },
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Text(
+                "Specification",
+                style: TextStyle(
+                  color: Color(0xFF223263),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Container(
+                height: 241,
+                width: 0.9146 * WidthScreen,
+                child: Text(
+                  "${widget.DescraptionName}",
+                  style: TextStyle(
+                      color: Color(0xFF223263),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400),
+                ),
+              ),
+              Row(children: [
+                Text(
+                  "",
+                  style: TextStyle(
+                      color: Color(0xFF223263),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400),
+                )              ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -322,7 +320,7 @@ class _ProductDetailState extends State<ProductDetail> {
 
 class ProductSlider extends StatelessWidget {
   ProductSlider({required this.image});
-  String image;
+   String image;
   @override
   Widget build(BuildContext context) {
     return Container(

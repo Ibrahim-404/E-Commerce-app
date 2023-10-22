@@ -108,11 +108,16 @@ class HomeScreen extends StatelessWidget {
                         scrollDirection: Axis.horizontal,
                         itemCount: snapshot.data!.data.ListOfCategoryData.length,
                         itemBuilder: (context, i) {
-                          return Catergory(
-                              imageUrl:
-                                  snapshot.data!.data.ListOfCategoryData[i].image,
-                              categoryName:
-                                  snapshot.data!.data.ListOfCategoryData[i].name);
+                          return GestureDetector(
+                            child: Catergory(
+                                imageUrl:
+                                    snapshot.data!.data.ListOfCategoryData[i].image,
+                                categoryName:
+                                    snapshot.data!.data.ListOfCategoryData[i].name),
+                            onTap: (){
+
+                            },
+                          );
                         },
                       ),
                     );
@@ -313,8 +318,18 @@ class HomeScreen extends StatelessWidget {
                         ),
                         onTap: (){
                           Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                                return ProductDetail(ID: snapshot.data!.data.ListOFCategoryApi[i].id);
+                              MaterialPageRoute(builder: (context){
+                                return ProductDetail(ID: snapshot.data!.data.ListOFCategoryApi[i].id,
+                                  DescraptionName: snapshot.data!.data.ListOFCategoryApi[i].description,
+                                  SliderImages: snapshot.data!.data.ListOFCategoryApi[i].images,
+                                  TilteName: snapshot.data!.data.ListOFCategoryApi[i].name,
+
+
+                                );
+
+
+
+
                               }));
                         },
                       );

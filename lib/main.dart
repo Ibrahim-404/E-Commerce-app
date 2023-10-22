@@ -36,20 +36,23 @@ Future<DataForProduct?> HandlingDataForProduct() async {
   return dataForProduct;
 }
 
-Future<DataForProduct?> HandlingDataForProductID(int ID) async {
+Future <List<ProductData>?>HandlingDataForProductID(int ID) async {
   DataForProduct? dataForProduct;
-    try {
+  List<ProductData>? ff;
+  try {
     final dio = Dio();
-    final res = await dio.get("https://student.valuxapps.com/api/products?category_id=$ID");
+    final res = await dio
+        .get("https://student.valuxapps.com/api/products?category_id=$ID");
     if (res.statusCode == 200) {
       dataForProduct = DataForProduct.fromJson(res.data);
-
+      ff = dataForProduct.data!.ListOFCategoryApi;
     }
   } catch (e) {
     print("Error: $e");
   }
-  return dataForProduct;
+  return ff;
 }
+
 void main() {
   runApp(testApp());
 }
